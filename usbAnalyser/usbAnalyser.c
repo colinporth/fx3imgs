@@ -1,5 +1,5 @@
 // usbDevWare.c
-//{{{  includes
+/*{{{  includes*/
 #include "cyu3system.h"
 #include "cyu3os.h"
 #include "cyu3dma.h"
@@ -15,8 +15,8 @@
 
 #include "../common/display.h"
 #include "../common/sensor.h"
-//}}}
-//{{{  defines
+/*}}}*/
+/*{{{  defines*/
 #define RESET_GPIO 22  // CTL 5 pin
 #define BUTTON_GPIO 45
 
@@ -24,9 +24,9 @@
 
 #define CY_FX_USB_BUTTON_DOWN_EVENT   (1 << 0)
 #define CY_FX_USB_BUTTON_UP_EVENT     (1 << 1)
-//}}}
-//{{{  descriptors
-//{{{
+/*}}}*/
+/*{{{  descriptors*/
+/*{{{*/
 const uint8_t CyFxUSB30DeviceDscr[] __attribute__ ((aligned (32))) = {
   0x12,                           /* Descriptor size */
   CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
@@ -43,8 +43,8 @@ const uint8_t CyFxUSB30DeviceDscr[] __attribute__ ((aligned (32))) = {
   0x00,                           /* Serial number string index */
   0x01                            /* Number of configurations */
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSB20DeviceDscr[] __attribute__ ((aligned (32))) = {
   0x12,                           /* Descriptor size */
   CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
@@ -61,9 +61,9 @@ const uint8_t CyFxUSB20DeviceDscr[] __attribute__ ((aligned (32))) = {
   0x00,                           /* Serial number string index */
   0x01                            /* Number of configurations */
   };
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 const uint8_t CyFxUSBBOSDscr[] __attribute__ ((aligned (32))) = {
   0x05,                           /* Descriptor size */
   CY_U3P_BOS_DESCR,               /* Device descriptor type */
@@ -86,8 +86,8 @@ const uint8_t CyFxUSBBOSDscr[] __attribute__ ((aligned (32))) = {
   0x0A,                           /* U1 Device Exit latency */
   0xFF,0x07                       /* U2 Device Exit latency */
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSBDeviceQualDscr[] __attribute__ ((aligned (32))) = {
   0x0A,                           /* Descriptor size */
   CY_U3P_USB_DEVQUAL_DESCR,       /* Device qualifier descriptor type */
@@ -99,9 +99,9 @@ const uint8_t CyFxUSBDeviceQualDscr[] __attribute__ ((aligned (32))) = {
   0x01,                           /* Number of configurations */
   0x00                            /* Reserved */
   };
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 const uint8_t CyFxUSBFSConfigDscr[] __attribute__ ((aligned (32))) = {
   /* Configuration descriptor */
   0x09,                           /* Descriptor size */
@@ -132,8 +132,8 @@ const uint8_t CyFxUSBFSConfigDscr[] __attribute__ ((aligned (32))) = {
   0x40,0x00,                      /* Max packet size = 64 bytes */
   0x00                            /* Servicing interval for data transfers : 0 for bulk */
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSBHSConfigDscr[] __attribute__ ((aligned (32))) = {
   /* Configuration descriptor */
   0x09,                           /* Descriptor size */
@@ -164,8 +164,8 @@ const uint8_t CyFxUSBHSConfigDscr[] __attribute__ ((aligned (32))) = {
   0x00,0x02,                      /* Max packet size = 512 bytes */
   0x00                            /* Servicing interval for data transfers : 0 for bulk */
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSBSSConfigDscr[] __attribute__ ((aligned (32))) = {
   /* Configuration descriptor */
   0x09,                           /* Descriptor size */
@@ -203,41 +203,41 @@ const uint8_t CyFxUSBSSConfigDscr[] __attribute__ ((aligned (32))) = {
   0x00,                           /* Max streams for bulk EP = 0 (No streams) */
   0x00,0x00,                      /* Service interval for the EP : 0 for bulk */
   };
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 const uint8_t CyFxUSBStringLangIDDscr[] __attribute__ ((aligned (32))) = {
   0x04,                           /* Descriptor size */
   CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
   0x09,0x04                       /* Language ID supported */
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSBManufactureDscr[] __attribute__ ((aligned (32))) = {
   0x10,                           /* Descriptor size */
   CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
   'C',0x00, 'y',0x00, 'p',0x00, 'r',0x00, 'e',0x00, 's',0x00, 's',0x00
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUSBProductDscr[] __attribute__ ((aligned (32))) = {
   0x08,                           /* Descriptor size */
   CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
   'F',0x00, 'X',0x00, '3',0x00
   };
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 const uint8_t CyFxUsbOSDscr[] __attribute__ ((aligned (32))) = {
   0x0E,
   CY_U3P_USB_STRING_DESCR,
   'O', 0x00, 'S', 0x00, ' ', 0x00, 'D', 0x00, 'e', 0x00, 's', 0x00, 'c', 0x00
   };
-//}}}
+/*}}}*/
 
 // align cache line
 const uint8_t CyFxUsbDscrAlignBuffer[32] __attribute__ ((aligned (32)));
-//}}}
-//{{{  vars
+/*}}}*/
+/*{{{  vars*/
 static CyU3PThread appThread;
 static CyU3PEvent appEvent;
 
@@ -250,10 +250,10 @@ volatile static CyBool_t hitFV = CyFalse;       // Whether end of frame (FV) sig
 volatile static CyBool_t gotPartial = CyFalse;  // track last partial buffer ensure committed to USB
 
 uint8_t glEp0Buffer[4096] __attribute__ ((aligned (32)));
-//}}}
+/*}}}*/
 
 // button interrupt
-//{{{
+/*{{{*/
 static void gpioInterruptCallback (uint8_t gpioId) {
 
   CyBool_t gpioValue = CyFalse;
@@ -263,10 +263,10 @@ static void gpioInterruptCallback (uint8_t gpioId) {
                      gpioValue ? CY_FX_USB_BUTTON_UP_EVENT : CY_FX_USB_BUTTON_DOWN_EVENT,
                      CYU3P_EVENT_OR);
   }
-//}}}
+/*}}}*/
 
 // vid thread
-//{{{
+/*{{{*/
 static void appStart() {
 
   line2 ("appStart");
@@ -307,8 +307,8 @@ static void appStart() {
 
   appActive = CyTrue;
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static void appStop() {
 // RESET or DISCONNECT event is received from the USB host
 
@@ -326,8 +326,8 @@ static void appStop() {
   epConfig.enable = CyFalse;
   CyU3PSetEpConfig (CY_FX_EP_CONSUMER, &epConfig);
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static void appClear() {
 // CLEAR FEATURE
 
@@ -340,9 +340,9 @@ static void appClear() {
 
   CyU3PDmaChannelSetXfer (&dmaChannel, 0);
   }
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 static void USBEventCallback (CyU3PUsbEventType_t evtype, uint16_t evdata) {
 
   switch (evtype) {
@@ -374,8 +374,8 @@ static void USBEventCallback (CyU3PUsbEventType_t evtype, uint16_t evdata) {
       break;
     }
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
 // Fast enumeration is used. Only requests addressed to the interface, class,
 // vendor and unknown control requests are received by this function.
@@ -396,31 +396,31 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
       case 0xA0: // streamer
         break;
       case 0xAD:
-        //{{{  readReg
+        /*{{{  readReg*/
         I2C_Read (wValue >> 8, wValue & 0xFF, glEp0Buffer);
 
         CyU3PUsbSendEP0Data (2, glEp0Buffer);
 
         isHandled = CyTrue;
         break;
-        //}}}
+        /*}}}*/
       case 0xAE:
-        //{{{  writeReg
+        /*{{{  writeReg*/
         CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
 
         I2C_Write (wValue >> 8, wValue & 0xFF, glEp0Buffer[0], glEp0Buffer[1]);
 
         isHandled = CyTrue;
         break;
-        //}}}
+        /*}}}*/
       case 0xAF:
-        //{{{  startStreaming
+        /*{{{  startStreaming*/
         line2 ("vStream");
         CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
 
         isHandled = CyTrue;
         break;
-        //}}}
+        /*}}}*/
       default: // other vendor
         line3 ("vendor", bRequest);
         break;
@@ -430,7 +430,7 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
     if ((bTarget == CY_U3P_USB_TARGET_INTF) &&
         ((bRequest == CY_U3P_USB_SC_SET_FEATURE) || (bRequest == CY_U3P_USB_SC_CLEAR_FEATURE)) &&
         (wValue == 0)) {
-      //{{{  SET_FEATURE(FUNCTION_SUSPEND) and CLEAR_FEATURE(FUNCTION_SUSPEND) request
+      /*{{{  SET_FEATURE(FUNCTION_SUSPEND) and CLEAR_FEATURE(FUNCTION_SUSPEND) request*/
       line2 ("interface");
       if (appActive) {
         CyU3PUsbAckSetup();
@@ -446,12 +446,12 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
 
       isHandled = CyTrue;
       }
-      //}}}
+      /*}}}*/
 
     if ((bTarget == CY_U3P_USB_TARGET_ENDPT) &&
         (bRequest == CY_U3P_USB_SC_CLEAR_FEATURE) &&
         (wValue == CY_U3P_USBX_FS_EP_HALT)) {
-      //{{{  clear feature request
+      /*{{{  clear feature request*/
       /* CLEAR_FEATURE request for endpoint is always passed to the setup callback
        * regardless of the enumeration model used. When a clear feature is received,
        * the previous transfer has to be flushed and cleaned up. This is done at the
@@ -475,12 +475,12 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
           }
         }
       }
-      //}}}
+      /*}}}*/
     }
   return isHandled;
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static CyBool_t LPMRqtCallback (CyU3PUsbLinkPowerMode link_mode) {
 // Callback function to handle LPM requests from the USB 3.0 host. This function is invoked by the API
 //   whenever a state change from U0 -> U1 or U0 -> U2 happens. If we return CyTrue from this function, the
@@ -491,9 +491,9 @@ static CyBool_t LPMRqtCallback (CyU3PUsbLinkPowerMode link_mode) {
 
   return CyTrue;
   }
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 static void debugInit() {
 
   CyU3PUartInit();
@@ -515,8 +515,8 @@ static void debugInit() {
 
   CyU3PDebugPreamble(CyFalse);
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static void gpioInit() {
 
   CyU3PGpioClock_t gpioClock;
@@ -552,19 +552,19 @@ static void gpioInit() {
   CyU3PGpioSetValue (RESET_GPIO, CyTrue);
   CyU3PThreadSleep (10);
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static void appInit() {
 
   CyU3PEventCreate (&appEvent);
-  //{{{  init P-port
+  /*{{{  init P-port*/
   CyU3PPibClock_t pibClock;
   pibClock.clkDiv = 4;
   pibClock.clkSrc = CY_U3P_SYS_CLK;
   pibClock.isDllEnable = CyFalse;
   pibClock.isHalfDiv = CyFalse;
   CyU3PPibInit (CyTrue, &pibClock);
-  //}}}
+  /*}}}*/
 
   sensorInit();
 
@@ -599,8 +599,8 @@ static void appInit() {
   else
     CyU3PConnectState (CyTrue, CyTrue);
   }
-//}}}
-//{{{
+/*}}}*/
+/*{{{*/
 static void appThreadFunc (uint32_t input) {
 
   CyU3PReturnStatus_t stat;
@@ -611,18 +611,18 @@ static void appThreadFunc (uint32_t input) {
     if (glForceLinkU2) {
       stat = CyU3PUsbGetLinkPowerState (&curState);
       while ((glForceLinkU2) && (stat == CY_U3P_SUCCESS) && (curState == CyU3PUsbLPM_U0)) {
-        //{{{  Repeatedly try to go into U2 state
+        /*{{{  Repeatedly try to go into U2 state*/
         CyU3PUsbSetLinkPowerState (CyU3PUsbLPM_U2);
         CyU3PThreadSleep (5);
         stat = CyU3PUsbGetLinkPowerState (&curState);
         }
-        //}}}
+        /*}}}*/
       }
     else {
       // Once data transfer has started, we keep trying to get the USB link to stay in U0. If this is done
       // before data transfers have started, there is a likelihood of failing the TD 9.24 U1/U2 test
       if (CyU3PUsbGetSpeed() == CY_U3P_SUPER_SPEED) {
-        //{{{  If the link is in U1/U2 states, try to get back to U0
+        /*{{{  If the link is in U1/U2 states, try to get back to U0*/
         stat = CyU3PUsbGetLinkPowerState (&curState);
         while ((stat == CY_U3P_SUCCESS) && (curState >= CyU3PUsbLPM_U1) && (curState <= CyU3PUsbLPM_U3)) {
           CyU3PUsbSetLinkPowerState (CyU3PUsbLPM_U0);
@@ -630,7 +630,7 @@ static void appThreadFunc (uint32_t input) {
           stat = CyU3PUsbGetLinkPowerState (&curState);
           }
         }
-        //}}}
+        /*}}}*/
       }
 
     uint32_t eventFlag;
@@ -643,15 +643,15 @@ static void appThreadFunc (uint32_t input) {
       }
     }
   }
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 void CyFxApplicationDefine() {
 
   debugInit();
   gpioInit();
 
-  displayInit ("USB analyser");
+  displayInit ("USB anal int");
 
   appInit();
 
@@ -667,9 +667,9 @@ void CyFxApplicationDefine() {
      CYU3P_AUTO_START        // Start the thread immediately
      );
   }
-//}}}
+/*}}}*/
 
-//{{{
+/*{{{*/
 int main() {
 
   CyU3PSysClockConfig_t clockConfig;
@@ -703,4 +703,4 @@ int main() {
 
   return 0;
   }
-//}}}
+/*}}}*/

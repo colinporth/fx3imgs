@@ -5,14 +5,14 @@
       <I2SEnabled>False</I2SEnabled>
       <I2CEnabled>False</I2CEnabled>
       <SPIEnabled>False</SPIEnabled>
-      <I2SEnabled>True</I2SEnabled>
+      <I2SEnabled>False</I2SEnabled>
       <ADMuxedEnabled>False</ADMuxedEnabled>
       <InterfaceType>Slave</InterfaceType>
       <CommunicationType>Synchronous</CommunicationType>
       <ClockSource>Internal</ClockSource>
       <ClockEdge>Positive</ClockEdge>
       <Endianness>LittleEndian</Endianness>
-      <DataBusWidth>Bit32</DataBusWidth>
+      <DataBusWidth>Bit8</DataBusWidth>
       <AddressBuswidth>0</AddressBuswidth>
     </InterfaceSetting>
   </InterfaceDefination>
@@ -36,7 +36,6 @@
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
       <RepeatCount>0</RepeatCount>
     </State>
-    <Transition ElementId="TRANSITION0" SourceState="STARTSTATE0" DestinationState="STATE0" Equation="LOGIC_ONE" />
     <State ElementId="STATE1" StateType="NormalState">
       <DisplayName>READDATA</DisplayName>
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
@@ -48,6 +47,7 @@
         <WriteDataIntoDataSink>True</WriteDataIntoDataSink>
       </Action>
     </State>
+    <Transition ElementId="TRANSITION0" SourceState="STARTSTATE0" DestinationState="STATE0" Equation="LOGIC_ONE" />
     <Transition ElementId="TRANSITION1" SourceState="STATE0" DestinationState="STATE1" Equation="DMA_RDY_TH0" />
     <Transition ElementId="TRANSITION2" SourceState="STATE1" DestinationState="STATE0" Equation="!DMA_RDY_TH0" />
   </StateMachine>
