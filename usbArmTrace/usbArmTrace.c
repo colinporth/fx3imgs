@@ -1014,8 +1014,22 @@ static void vidThreadFunc (uint32_t input) {
 
 // control thread
 /*{{{*/
+static void abortHandler() {
+
+  uint32_t flag;
+  if (CyU3PEventGet (&uvcEvent, STREAM_EVENT, CYU3P_EVENT_AND, &flag, CYU3P_NO_WAIT) == CY_U3P_SUCCESS) {
+    // Clear the Video Stream Request Event
+    CyU3PEventSet (&uvcEvent, ~(STREAM_EVENT), CYU3P_EVENT_AND);
+
+    // Set Video Stream Abort Event
+    CyU3PEventSet (&uvcEvent, STREAM_ABORT_EVENT, CYU3P_EVENT_OR);
+    }
+  }
+/*}}}*/
+/*{{{*/
 static void stopStreaming() {
 
+  analyserMode = CyFalse;    
   streamingStarted = CyFalse;
 
   // Disable the GPIF state machine
@@ -1034,19 +1048,6 @@ static void stopStreaming() {
 
   // Clear the stall condition and sequence numbers
   CyU3PUsbStall (CY_FX_EP_BULK_VID, CyFalse, CyTrue);
-  }
-/*}}}*/
-/*{{{*/
-static void abortHandler() {
-
-  uint32_t flag;
-  if (CyU3PEventGet (&uvcEvent, STREAM_EVENT, CYU3P_EVENT_AND, &flag, CYU3P_NO_WAIT) == CY_U3P_SUCCESS) {
-    // Clear the Video Stream Request Event
-    CyU3PEventSet (&uvcEvent, ~(STREAM_EVENT), CYU3P_EVENT_AND);
-
-    // Set Video Stream Abort Event
-    CyU3PEventSet (&uvcEvent, STREAM_ABORT_EVENT, CYU3P_EVENT_OR);
-    }
   }
 /*}}}*/
 

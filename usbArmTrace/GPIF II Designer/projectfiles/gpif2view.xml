@@ -2,8 +2,8 @@
 <Root version="4">
   <CyStates>
     <CyNormalState>
-      <Left>188</Left>
-      <Top>20.4466666666667</Top>
+      <Left>346</Left>
+      <Top>108.446666666667</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE0</Name>
@@ -13,8 +13,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>346</Left>
-      <Top>20.41</Top>
+      <Left>343</Left>
+      <Top>199.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE1</Name>
@@ -24,8 +24,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>251</Left>
-      <Top>152.41</Top>
+      <Left>344</Left>
+      <Top>292.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE2</Name>
@@ -35,8 +35,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>463</Left>
-      <Top>152.41</Top>
+      <Left>556</Left>
+      <Top>292.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE3</Name>
@@ -46,8 +46,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>68</Left>
-      <Top>155.41</Top>
+      <Left>161</Left>
+      <Top>295.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE4</Name>
@@ -57,8 +57,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>656</Left>
-      <Top>154.41</Top>
+      <Left>749</Left>
+      <Top>294.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE5</Name>
@@ -68,8 +68,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>65</Left>
-      <Top>291.41</Top>
+      <Left>158</Left>
+      <Top>431.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE6</Name>
@@ -79,8 +79,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>659</Left>
-      <Top>291.41</Top>
+      <Left>752</Left>
+      <Top>431.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE7</Name>
@@ -90,8 +90,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>257</Left>
-      <Top>290.41</Top>
+      <Left>350</Left>
+      <Top>430.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE8</Name>
@@ -101,8 +101,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>466</Left>
-      <Top>292.41</Top>
+      <Left>559</Left>
+      <Top>432.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE9</Name>
@@ -112,8 +112,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>65</Left>
-      <Top>424.41</Top>
+      <Left>158</Left>
+      <Top>564.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE10</Name>
@@ -123,8 +123,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>662</Left>
-      <Top>425.41</Top>
+      <Left>755</Left>
+      <Top>565.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE11</Name>
@@ -134,8 +134,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>258</Left>
-      <Top>424.41</Top>
+      <Left>351</Left>
+      <Top>564.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE12</Name>
@@ -145,8 +145,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyNormalState>
-      <Left>466</Left>
-      <Top>425.41</Top>
+      <Left>559</Left>
+      <Top>565.41</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STATE13</Name>
@@ -156,8 +156,8 @@
       <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
     </CyNormalState>
     <CyStartState>
-      <Left>29</Left>
-      <Top>18.4466666666667</Top>
+      <Left>344</Left>
+      <Top>6</Top>
       <Width>83</Width>
       <Height>70</Height>
       <Name>STARTSTATE0</Name>
@@ -346,7 +346,7 @@
     </CyTransition>
     <CyTransition>
       <Name>TRANSITION2</Name>
-      <TransitionEquation>FV&amp;LV</TransitionEquation>
+      <TransitionEquation>FV</TransitionEquation>
       <SourceName>STATE1</SourceName>
       <SinkName>STATE2</SinkName>
       <SourceConnectorName>Connector</SourceConnectorName>
