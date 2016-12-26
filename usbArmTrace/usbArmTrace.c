@@ -896,22 +896,22 @@ static void gpifCallback (CyU3PGpifEventType event, uint8_t currentState) {
     hitFV = CyTrue;
 
     switch (currentState) {
-      case FULL_BUF_IN_SCK0:
-      case FULL_BUF_IN_SCK1:
+      //case FULL_BUF_IN_SCK0:
+      //case FULL_BUF_IN_SCK1:
         // Buffer is already full and would have been committed. Do nothing
-        break;
+      //  break;
 
-      case PARTIAL_BUF_IN_SCK0:
-        if (CyU3PDmaMultiChannelSetWrapUp (&dmaMultiChannel, 0) != CY_U3P_SUCCESS)
-          CyU3PDebugPrint (4, "CyFxGpifCallback Channel Set WrapUp failed\r\n");
-        gotPartial = CyTrue;
-        break;
+      //case PARTIAL_BUF_IN_SCK0:
+      //  if (CyU3PDmaMultiChannelSetWrapUp (&dmaMultiChannel, 0) != CY_U3P_SUCCESS)
+      //    CyU3PDebugPrint (4, "CyFxGpifCallback Channel Set WrapUp failed\r\n");
+      //  gotPartial = CyTrue;
+      //  break;
 
-      case PARTIAL_BUF_IN_SCK1:
-        if (CyU3PDmaMultiChannelSetWrapUp (&dmaMultiChannel, 1) != CY_U3P_SUCCESS)
-          CyU3PDebugPrint (4, "CyFxGpifCallback Channel Set WrapUp failed\r\n");
-        gotPartial = CyTrue;
-        break;
+      //case PARTIAL_BUF_IN_SCK1:
+      //  if (CyU3PDmaMultiChannelSetWrapUp (&dmaMultiChannel, 1) != CY_U3P_SUCCESS)
+      //    CyU3PDebugPrint (4, "CyFxGpifCallback Channel Set WrapUp failed\r\n");
+      //  gotPartial = CyTrue;
+      //  break;
 
       default:
         CyU3PDebugPrint (4, "CyFxGpifCallback failed!\n");
@@ -1029,7 +1029,7 @@ static void abortHandler() {
 /*{{{*/
 static void stopStreaming() {
 
-  analyserMode = CyFalse;    
+  analyserMode = CyFalse;
   streamingStarted = CyFalse;
 
   // Disable the GPIF state machine
