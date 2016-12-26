@@ -1278,64 +1278,12 @@ static void pibCallback (CyU3PPibIntrType cbType, uint16_t cbArg) {
 
 /*{{{*/
 static void processingUnitRequests() {
-
-  uint16_t readCount;
-  switch (wValue) {
-    case CY_FX_UVC_PU_BRIGHTNESS_CONTROL:
-      switch (bRequest) {
-        case CY_FX_USB_UVC_GET_INFO_REQ: // Both GET and SET requests are supported, auto modes not supported
-          glEp0Buffer[0] = 3;
-          CyU3PUsbSendEP0Data (1, (uint8_t*)glEp0Buffer);
-          break;
-        default:
-          CyU3PUsbStall (0, CyTrue, CyFalse);
-          break;
-        }
-      break;
-
-    default:
-      // Only the brightness control is supported as of now. Add additional code here to support other controls
-      CyU3PUsbStall (0, CyTrue, CyFalse);
-      break;
-    }
+  CyU3PUsbStall (0, CyTrue, CyFalse);
   }
 /*}}}*/
 /*{{{*/
 static void cameraTerminalRequests() {
-
-  CyU3PReturnStatus_t apiRetStatus = CY_U3P_SUCCESS;
-
-  uint16_t readCount;
-
-  switch (wValue) {
-    case CY_FX_UVC_CT_ZOOM_ABSOLUTE_CONTROL:
-      switch (bRequest) {
-        case CY_FX_USB_UVC_GET_INFO_REQ:
-          glEp0Buffer[0] = 3;                /* Support GET/SET queries. */
-          CyU3PUsbSendEP0Data (1, (uint8_t *)glEp0Buffer);
-          break;
-        default:
-          CyU3PUsbStall (0, CyTrue, CyFalse);
-          break;
-        }
-      break;
-
-    case CY_FX_UVC_CT_PANTILT_ABSOLUTE_CONTROL:
-      switch (bRequest) {
-        case CY_FX_USB_UVC_GET_INFO_REQ:
-          glEp0Buffer[0] = 3;                /* GET/SET requests supported for this control */
-          CyU3PUsbSendEP0Data (1, (uint8_t *)glEp0Buffer);
-          break;
-        default:
-          CyU3PUsbStall (0, CyTrue, CyFalse);
-          break;
-        }
-      break;
-
-    default:
-      CyU3PUsbStall (0, CyTrue, CyFalse);
-      break;
-    }
+  CyU3PUsbStall (0, CyTrue, CyFalse);
   }
 /*}}}*/
 /*{{{*/
@@ -1563,7 +1511,8 @@ static void gpioInit() {
 static void appInit() {
 
   CyU3PEventCreate (&uvcEvent);
-  /*{{{  init P-port*/
+
+  // init P-port clock
   CyU3PPibClock_t pibClock;
   pibClock.clkDiv = 2;
   pibClock.clkSrc = CY_U3P_SYS_CLK;
@@ -1571,11 +1520,13 @@ static void appInit() {
   pibClock.isHalfDiv = CyFalse;
   CyU3PPibInit (CyTrue, &pibClock);
 
+  // register gpif pib callbacks
   CyU3PGpifRegisterCallback (gpifCallback);
-  /*}}}*/
   CyU3PPibRegisterCallback (pibCallback, CYU3P_PIB_INTR_ERROR);
 
   CyU3PUsbStart();
+
+  // register USB callbacks
   CyU3PUsbRegisterSetupCallback (USBSetupCallback, CyFalse);
   CyU3PUsbRegisterEventCallback (USBEventCallback);
 
