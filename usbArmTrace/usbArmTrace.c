@@ -919,6 +919,18 @@ static void gpifCallback (CyU3PGpifEventType event, uint8_t currentState) {
     }
   }
 /*}}}*/
+/*{{{*/
+static void pibCallback (CyU3PPibIntrType cbType, uint16_t cbArg) {
+
+  if ((cbType == CYU3P_PIB_INTR_ERROR) && ((cbArg == 0x1005) || (cbArg == 0x1006))) {
+    if (!backFlowDetected) {
+      //CyU3PDebugPrint (4, "Backflow detected\r\n");
+      line2 ("pib err");
+      backFlowDetected = 1;
+      }
+    }
+  }
+/*}}}*/
 
 /*{{{*/
 static void vidThreadFunc (uint32_t input) {
@@ -933,10 +945,9 @@ static void vidThreadFunc (uint32_t input) {
       CyU3PDmaBuffer_t produced_buffer;
       if (CyU3PDmaMultiChannelGetBuffer (&dmaMultiChannel, &produced_buffer, CYU3P_NO_WAIT) == CY_U3P_SUCCESS) {
         /*{{{  add header, commit to consumer endpoint*/
-        if (produced_buffer.count == 16384 - 16) {
+        if (produced_buffer.count == 16384) {
           // full buffer, add normal header to buffer
           }
-
         else {
           // partial buffer, add EOF header to buffer
           gotPartial = CyFalse;
@@ -1101,42 +1112,20 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
   wLength  = (setupdat1 & CY_U3P_USB_LENGTH_MASK) >> CY_U3P_USB_LENGTH_POS;
 
   CyBool_t isHandled = CyFalse;
-
   if (bType == CY_U3P_USB_VENDOR_RQT) {
     switch (bRequest) {
       case 0xA0: // streamer example test
         break;
-      case 0xAC:
-        /*{{{  sensorFocus*/
-        CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
 
-        isHandled = CyTrue;
-        break;
-        /*}}}*/
-      case 0xAD:
-        /*{{{  readReg*/
-        //line3 ("vRead", wValue);
-        I2C_Read (wValue >> 8, wValue & 0xFF, glEp0Buffer);
-        CyU3PUsbSendEP0Data (2, glEp0Buffer);
-        isHandled = CyTrue;
-        break;
-        /*}}}*/
-      case 0xAE:
-        /*{{{  writeReg*/
-        //line3 ("vWrite", wValue);
+      case 0xAE: // stop analyser
         CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
-        I2C_Write (wValue >> 8, wValue & 0xFF, glEp0Buffer[0], glEp0Buffer[1]);
+        stopStreaming();
+        abortHandler();
         isHandled = CyTrue;
         break;
-        /*}}}*/
-      case 0xAF:
-        /*{{{  start analyser streaming*/
-        CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
 
-        if (streamingStarted == CyTrue) {
-          stopStreaming();
-          abortHandler();
-          }
+      case 0xAF: // start analyser
+        CyU3PUsbGetEP0Data (wLength, glEp0Buffer, NULL);
 
         if (analyserMode == CyFalse) {
           analyserMode = CyTrue;
@@ -1145,134 +1134,30 @@ static CyBool_t USBSetupCallback (uint32_t setupdat0, uint32_t setupdat1) {
           // create manual dmaMultiChannel for video to USB host
           CyU3PDmaMultiChannelConfig_t dmaMultiChannelConfig;
           CyU3PMemSet ((uint8_t*)&dmaMultiChannelConfig, 0, sizeof(dmaMultiChannelConfig));
-
           dmaMultiChannelConfig.size           = 16384;
           dmaMultiChannelConfig.count          = 4;
           dmaMultiChannelConfig.validSckCount  = 2;
           dmaMultiChannelConfig.prodSckId [0]  = CY_U3P_PIB_SOCKET_0;
           dmaMultiChannelConfig.prodSckId [1]  = CY_U3P_PIB_SOCKET_1;
-
           dmaMultiChannelConfig.consSckId [0]  = CY_U3P_UIB_SOCKET_CONS_1; // ep1
           dmaMultiChannelConfig.prodHeader     = 0;
-          dmaMultiChannelConfig.prodFooter     = 16;
-
+          dmaMultiChannelConfig.prodFooter     = 0;
           dmaMultiChannelConfig.dmaMode        = CY_U3P_DMA_MODE_BYTE;
           dmaMultiChannelConfig.notification   = CY_U3P_DMA_CB_CONS_EVENT;
           dmaMultiChannelConfig.cb             = vidDmaCallback;
-
           CyU3PDmaMultiChannelCreate (&dmaMultiChannel, CY_U3P_DMA_TYPE_MANUAL_MANY_TO_ONE, &dmaMultiChannelConfig);
           }
-
         CyU3PEventSet (&uvcEvent, STREAM_EVENT, CYU3P_EVENT_OR);
-
         isHandled = CyTrue;
         break;
-        /*}}}*/
+
       default: // other vendor request
         line3 ("vendor", bRequest);
         break;
       }
     }
-  else {
-    // UVC Class Requests
-    switch (bReqType) {
-      case CY_FX_USB_UVC_GET_REQ_TYPE:
-      /*{{{*/
-      case CY_FX_USB_UVC_SET_REQ_TYPE:   // start UVC streaming
-        // UVC Specific requests are handled in the EP0 thread
-        switch (wIndex & 0xFF) {
-          case CY_FX_UVC_CONTROL_INTERFACE: {
-            CyU3PEventSet (&uvcEvent, VIDEO_CONTROL_EVENT, CYU3P_EVENT_OR);
-            isHandled = CyTrue;
-            break;
-            }
-
-          case CY_FX_UVC_STREAM_INTERFACE: {
-            analyserMode = CyFalse;
-            CyU3PDmaMultiChannelDestroy (&dmaMultiChannel);
-
-            // create manual dmaMultiChannel for video to USB host
-            CyU3PDmaMultiChannelConfig_t dmaMultiChannelConfig;
-            CyU3PMemSet ((uint8_t*)&dmaMultiChannelConfig, 0, sizeof(dmaMultiChannelConfig));
-            dmaMultiChannelConfig.size           = 16384;
-            dmaMultiChannelConfig.count          = 4;
-            dmaMultiChannelConfig.validSckCount  = 2;
-            dmaMultiChannelConfig.prodSckId [0]  = CY_U3P_PIB_SOCKET_0;
-            dmaMultiChannelConfig.prodSckId [1]  = CY_U3P_PIB_SOCKET_1;
-            dmaMultiChannelConfig.consSckId [0]  = CY_U3P_UIB_SOCKET_CONS_3; // ep3
-            dmaMultiChannelConfig.prodHeader     = 12; // 12 byte UVC header to be added
-            dmaMultiChannelConfig.prodFooter     = 4;  // byte footer to compensate for the 12 byte header
-            dmaMultiChannelConfig.dmaMode        = CY_U3P_DMA_MODE_BYTE;
-            dmaMultiChannelConfig.notification   = CY_U3P_DMA_CB_CONS_EVENT;
-            dmaMultiChannelConfig.cb             = vidDmaCallback;
-            CyU3PDmaMultiChannelCreate (&dmaMultiChannel, CY_U3P_DMA_TYPE_MANUAL_MANY_TO_ONE, &dmaMultiChannelConfig);
-
-            CyU3PEventSet (&uvcEvent, VIDEO_STREAM_EVENT, CYU3P_EVENT_OR);
-            isHandled = CyTrue;
-            break;
-            }
-
-          default:
-            break;
-          }
-
-        break;
-      /*}}}*/
-      /*{{{*/
-      case CY_FX_USB_SET_INTF_REQ_TYPE:
-        if (bRequest == CY_FX_USB_SET_INTERFACE_REQ) {
-          // MAC OS sends Set Interface Alternate Setting 0 command after
-          //stopping to stream. This application needs to stop streaming
-          }
-        break;
-      /*}}}*/
-      /*{{{*/
-      case CY_U3P_USB_TARGET_ENDPT:      // abort UVC streaming
-        if (bRequest == CY_U3P_USB_SC_CLEAR_FEATURE) {
-          if (wIndex == CY_FX_EP_BULK_VID) {
-            // Windows OS sends Clear Feature Request after it stops streaming,
-            // however MAC OS sends clear feature request right after it sends a
-            // Commit -> SET_CUR request. Hence, stop streaming only of streaming has started
-            if (streamingStarted == CyTrue) {
-              line2 ("clearFeature");
-
-              stopStreaming();
-
-              // Complete Control request handshake
-              CyU3PUsbAckSetup();
-
-              // Indicate stop streaming to main thread
-              clearFeatureRqtReceived = CyTrue;
-              abortHandler();
-
-              isHandled = CyTrue;
-              }
-            else {
-              CyU3PUsbAckSetup();
-              isHandled = CyTrue;
-              }
-            }
-          }
-        break;
-      /*}}}*/
-      default:
-        break;
-      }
-    }
 
   return isHandled;
-  }
-/*}}}*/
-/*{{{*/
-static void pibCallback (CyU3PPibIntrType cbType, uint16_t cbArg) {
-
-  if ((cbType == CYU3P_PIB_INTR_ERROR) && ((cbArg == 0x1005) || (cbArg == 0x1006))) {
-    if (!backFlowDetected) {
-      //CyU3PDebugPrint (4, "Backflow detected\r\n");
-      line2 ("pib err");
-      backFlowDetected = 1;
-      }
-    }
   }
 /*}}}*/
 

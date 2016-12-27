@@ -3,7 +3,7 @@
   <InterfaceDefination>
     <InterfaceSetting>
       <I2SEnabled>False</I2SEnabled>
-      <I2CEnabled>True</I2CEnabled>
+      <I2CEnabled>False</I2CEnabled>
       <SPIEnabled>False</SPIEnabled>
       <I2SEnabled>False</I2SEnabled>
       <ADMuxedEnabled>False</ADMuxedEnabled>
@@ -16,26 +16,7 @@
       <AddressBuswidth>0</AddressBuswidth>
     </InterfaceSetting>
   </InterfaceDefination>
-  <Signals>
-    <Signal ElementId="INPUT0" SignalType="Input" SpecialFunction="None">
-      <DisplayName>LV</DisplayName>
-      <GPIOPinNumber>GPIO_28</GPIOPinNumber>
-      <Polarity>ActiveHigh</Polarity>
-    </Signal>
-    <Signal ElementId="INPUT1" SignalType="Input" SpecialFunction="None">
-      <DisplayName>FV</DisplayName>
-      <GPIOPinNumber>GPIO_29</GPIOPinNumber>
-      <Polarity>ActiveHigh</Polarity>
-    </Signal>
-    <Signal ElementId="OUTPUT0" SignalType="Output" SpecialFunction="None">
-      <DisplayName>nSensor_Reset</DisplayName>
-      <GPIOPinNumber>GPIO_22</GPIOPinNumber>
-      <IntialValue>High</IntialValue>
-      <Polarity>ActiveLow</Polarity>
-      <Delay>Alpha</Delay>
-      <AssetionType>Assert</AssetionType>
-    </Signal>
-  </Signals>
+  <Signals />
   <StateMachine>
     <AddressCounter />
     <DataCounter />
@@ -50,11 +31,7 @@
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
       <RepeatCount>0</RepeatCount>
     </State>
-    <State ElementId="STATE0" StateType="NormalState">
-      <DisplayName>IDLE</DisplayName>
-      <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
-      <RepeatCount>0</RepeatCount>
-    </State>
+    <Transition ElementId="TRANSITION0" SourceState="STARTSTATE0" DestinationState="STATE1" Equation="LOGIC_ONE" />
     <State ElementId="STATE1" StateType="NormalState">
       <DisplayName>WAIT_FOR_FRAME_START</DisplayName>
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
@@ -62,7 +39,7 @@
       <Action ElementId="LD_DATA_COUNT0" ActionType="LD_DATA_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>16367</CounterLimit>
+        <CounterLimit>16383</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -70,7 +47,7 @@
       <Action ElementId="LD_ADDR_COUNT0" ActionType="LD_ADDR_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>16367</CounterLimit>
+        <CounterLimit>16383</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -90,7 +67,7 @@
       <Action ElementId="LD_ADDR_COUNT0" ActionType="LD_ADDR_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>16367</CounterLimit>
+        <CounterLimit>16383</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -110,15 +87,13 @@
       <Action ElementId="LD_DATA_COUNT0" ActionType="LD_DATA_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>16367</CounterLimit>
+        <CounterLimit>16383</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
       </Action>
     </State>
-    <Transition ElementId="TRANSITION0" SourceState="STARTSTATE0" DestinationState="STATE0" Equation="LOGIC_ONE" />
-    <Transition ElementId="TRANSITION1" SourceState="STATE0" DestinationState="STATE1" Equation="!FV" />
-    <Transition ElementId="TRANSITION2" SourceState="STATE1" DestinationState="STATE2" Equation="FV" />
+    <Transition ElementId="TRANSITION2" SourceState="STATE1" DestinationState="STATE2" Equation="LOGIC_ONE" />
     <Transition ElementId="TRANSITION3" SourceState="STATE2" DestinationState="STATE3" Equation="DATA_CNT_HIT" />
     <Transition ElementId="TRANSITION4" SourceState="STATE3" DestinationState="STATE2" Equation="ADDR_CNT_HIT" />
   </StateMachine>

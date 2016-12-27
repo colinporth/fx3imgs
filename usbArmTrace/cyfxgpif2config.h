@@ -1,6 +1,6 @@
 /*
  * Project Name: ImageSensorInterface.cyfx
- * Time : 12/26/2016 16:20:47
+ * Time : 12/27/2016 11:55:41
  * Device Type: FX3
  * Project Type: GPIF2
  *
@@ -21,16 +21,15 @@
 /* Summary
    Number of states in the state machine
  */
-#define CY_NUMBER_OF_STATES 5
+#define CY_NUMBER_OF_STATES 4
 
 /* Summary
    Mapping of user defined state names to state indices
  */
 #define START 0
-#define IDLE 1
-#define WAIT_FOR_FRAME_START 2
-#define PUSH_DATA_SCK0 3
-#define PUSH_DATA_SCK1 4
+#define WAIT_FOR_FRAME_START 1
+#define PUSH_DATA_SCK0 2
+#define PUSH_DATA_SCK1 3
 
 
 /* Summary
@@ -43,7 +42,7 @@
    Transition function values used in the state machine.
  */
 uint16_t CyFxGpifTransition[]  = {
-    0x0000, 0x5555, 0xAAAA
+    0x0000, 0xFFFF, 0xAAAA
 };
 
 /* Summary
@@ -53,17 +52,16 @@ uint16_t CyFxGpifTransition[]  = {
    waveform table. 
  */
 CyU3PGpifWaveData CyFxGpifWavedata[]  = {
-    {{0x1E738C01,0x00000000,0x80000000},{0x00000000,0x00000000,0x00000000}},
-    {{0x2E738C02,0x00000100,0x800000A0},{0x00000000,0x00000000,0x00000000}},
-    {{0x2E739403,0x20000100,0x80000060},{0x00000000,0x00000000,0x00000000}},
-    {{0x2E739304,0x24000100,0x80000090},{0x00000000,0x00000000,0x00000000}}
+    {{0x1E739C01,0x00000100,0x800000A0},{0x00000000,0x00000000,0x00000000}},
+    {{0x2E739402,0x20000100,0x80000060},{0x00000000,0x00000000,0x00000000}},
+    {{0x2E739303,0x24000100,0x80000090},{0x00000000,0x00000000,0x00000000}}
 };
 
 /* Summary
    Table that maps state indices to the descriptor table indices.
  */
 uint8_t CyFxGpifWavedataPosition[]  = {
-    0,1,2,3,2
+    0,1,2,1
 };
 
 /* Summary
@@ -79,9 +77,9 @@ uint32_t CyFxGpifRegValue[]  = {
     0x00000000,  /*  CY_U3P_PIB_GPIF_INTR_MASK */
     0x00000082,  /*  CY_U3P_PIB_GPIF_SERIAL_IN_CONFIG */
     0x00000782,  /*  CY_U3P_PIB_GPIF_SERIAL_OUT_CONFIG */
-    0x00000400,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_DIRECTION */
-    0x0000E7FF,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_DEFAULT */
-    0x00000020,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_POLARITY */
+    0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_DIRECTION */
+    0x0000FFFF,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_DEFAULT */
+    0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_POLARITY */
     0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_TOGGLE */
     0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_SELECT */
     0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_BUS_SELECT */
@@ -104,12 +102,12 @@ uint32_t CyFxGpifRegValue[]  = {
     0x0000FFFF,  /*  CY_U3P_PIB_GPIF_CTRL_COUNT_LIMIT */
     0x00000109,  /*  CY_U3P_PIB_GPIF_ADDR_COUNT_CONFIG */
     0x00000000,  /*  CY_U3P_PIB_GPIF_ADDR_COUNT_RESET */
-    0x00003FEF,  /*  CY_U3P_PIB_GPIF_ADDR_COUNT_LIMIT */
+    0x00003FFF,  /*  CY_U3P_PIB_GPIF_ADDR_COUNT_LIMIT */
     0x00000000,  /*  CY_U3P_PIB_GPIF_STATE_COUNT_CONFIG */
     0x0000FFFF,  /*  CY_U3P_PIB_GPIF_STATE_COUNT_LIMIT */
     0x00000109,  /*  CY_U3P_PIB_GPIF_DATA_COUNT_CONFIG */
     0x00000000,  /*  CY_U3P_PIB_GPIF_DATA_COUNT_RESET */
-    0x00003FEF,  /*  CY_U3P_PIB_GPIF_DATA_COUNT_LIMIT */
+    0x00003FFF,  /*  CY_U3P_PIB_GPIF_DATA_COUNT_LIMIT */
     0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_COMP_VALUE */
     0x00000000,  /*  CY_U3P_PIB_GPIF_CTRL_COMP_MASK */
     0x00000000,  /*  CY_U3P_PIB_GPIF_DATA_COMP_VALUE */
