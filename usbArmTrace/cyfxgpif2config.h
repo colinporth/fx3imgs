@@ -1,6 +1,6 @@
 /*
  * Project Name: ImageSensorInterface.cyfx
- * Time : 12/26/2016 16:08:18
+ * Time : 12/26/2016 16:20:47
  * Device Type: FX3
  * Project Type: GPIF2
  *

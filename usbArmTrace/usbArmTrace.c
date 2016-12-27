@@ -20,7 +20,6 @@
 /*}}}*/
 //#define lines1200
 /*{{{  defines*/
-#define RESET_GPIO  22  // CTL 5 pin
 #define BUTTON_GPIO 45
 
 // endpoints
@@ -1269,8 +1268,8 @@ static void pibCallback (CyU3PPibIntrType cbType, uint16_t cbArg) {
 
   if ((cbType == CYU3P_PIB_INTR_ERROR) && ((cbArg == 0x1005) || (cbArg == 0x1006))) {
     if (!backFlowDetected) {
-      CyU3PDebugPrint (4, "Backflow detected\r\n");
-      line2 ("b");
+      //CyU3PDebugPrint (4, "Backflow detected\r\n");
+      line2 ("pib err");
       backFlowDetected = 1;
       }
     }
@@ -1399,13 +1398,13 @@ static void controlThreadFunc (uint32_t input) {
         /*{{{  get and display usb speed*/
         usbSpeed = CyU3PUsbGetSpeed();
         if (usbSpeed == CY_U3P_SUPER_SPEED)
-          line1 ("USB arm 3.0");
+          line3 ("USB", 3);
         else if (usbSpeed == CY_U3P_HIGH_SPEED)
-          line1 ("USB arm 2.0");
+          line3 ("USB", 2);
         else if (usbSpeed == CY_U3P_FULL_SPEED)
-          line1 ("USB arm 1.0");
+          line3 ("USB", 1);
         else
-          line1 ("USB arm 0");
+          line3 ("USB", 0);
         }
         /*}}}*/
       if (eventFlag & VIDEO_CONTROL_EVENT) {
@@ -1491,21 +1490,6 @@ static void gpioInit() {
   gpioConfig.driveHighEn = CyFalse;
   gpioConfig.intrMode    = CY_U3P_GPIO_INTR_BOTH_EDGE;
   CyU3PGpioSetSimpleConfig (BUTTON_GPIO, &gpioConfig);
-
-  // config RESET_GPIO CTL5 pin
-  CyU3PDeviceGpioOverride (RESET_GPIO, CyTrue);
-  gpioConfig.outValue    = CyTrue;
-  gpioConfig.driveLowEn  = CyTrue;
-  gpioConfig.driveHighEn = CyTrue;
-  gpioConfig.inputEn     = CyFalse;
-  gpioConfig.intrMode    = CY_U3P_GPIO_NO_INTR;
-  CyU3PGpioSetSimpleConfig (RESET_GPIO, &gpioConfig);
-
-  // pulse reset lo
-  CyU3PGpioSetValue (RESET_GPIO, CyFalse);
-  CyU3PThreadSleep (10);
-  CyU3PGpioSetValue (RESET_GPIO, CyTrue);
-  CyU3PThreadSleep (10);
   }
 /*}}}*/
 /*{{{*/
@@ -1577,7 +1561,7 @@ void CyFxApplicationDefine() {
 
   debugInit();
   gpioInit();
-  displayInit ("USB arm");
+  displayInit ("anal 8 ext fv");
   appInit();
 
   // Create the UVC application thread
