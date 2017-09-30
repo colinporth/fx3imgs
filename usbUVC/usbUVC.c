@@ -1799,7 +1799,7 @@ void CyFxApplicationDefine() {
 
   debugInit();
   gpioInit();
-  displayInit ("uvc");
+  displayInit ("uvc MTD9xxx");
   PTZInit();
   appInit();
 
