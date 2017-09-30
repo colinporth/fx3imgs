@@ -130,6 +130,11 @@ void sensorButton (int value) {
     }
   }
 //}}}
+//{{{
+void sensorFocus (int value) {
+  // ntohing
+  }
+//}}}
 
 //{{{
 void sensorInit() {

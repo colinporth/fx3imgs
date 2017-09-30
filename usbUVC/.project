@@ -45,9 +45,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/common/ptz.c</locationURI>
 		</link>
 		<link>
-			<name>sensorMT9D111.c</name>
+			<name>sensorMT9D112.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/common/sensorMT9D111.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/common/sensorMT9D112.c</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
