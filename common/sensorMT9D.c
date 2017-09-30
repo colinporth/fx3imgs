@@ -4,6 +4,7 @@
 #include <cyu3os.h>
 #include <cyu3error.h>
 #include <cyu3uart.h>
+#include <cyu3i2c.h>
 #include <cyu3types.h>
 #include <cyu3utils.h>
 
