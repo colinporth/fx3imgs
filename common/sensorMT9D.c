@@ -459,9 +459,11 @@ void sensorInit111() {
   writeReg111 (0xC6, 0xA76F); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 A = 225
   writeReg111 (0xC6, 0x2774); writeReg111 (0xC8, 0xE0E1); // FIFO_Conf1 B = 57569
   writeReg111 (0xC6, 0xA776); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 B = 225
+
   writeReg111 (0xC6, 0x220B); writeReg111 (0xC8, 0x0192); // Max R12 B (Shutter Delay) = 402
   writeReg111 (0xC6, 0xA217); writeReg111 (0xC8, 0x08);   // IndexTH23 = 8
   writeReg111 (0xC6, 0x2228); writeReg111 (0xC8, 0x020F); // RowTime (msclk per)/4 = 527
+
   writeReg111 (0xC6, 0x222F); writeReg111 (0xC8, 0x009A); // R9 Step = 94
   writeReg111 (0xC6, 0xA408); writeReg111 (0xC8, 0x24);   // search_f1_50 = 21
   writeReg111 (0xC6, 0xA409); writeReg111 (0xC8, 0x26);   // search_f2_50 = 23
