@@ -169,7 +169,7 @@ void sensorScaling (int lines) {
       writeReg112 (0x338C, 0xA103); writeReg112 (0x3390, 0x0002); // sequencer.cmd - goto capture mode B
       }
     else{
-      line2 ("640x480x30");
+      line2 ("800x600x30");
       writeReg112 (0x338C, 0xA120); writeReg112 (0x3390, 0x0000); // sequencer.params.mode - none
       writeReg112 (0x338C, 0xA103); writeReg112 (0x3390, 0x0001); // sequencer.cmd - goto preview mode A
       }
@@ -324,18 +324,18 @@ void sensorInit111() {
   ; 60Hz Flicker Period: 154.97 lines
   */
   //}}}
-  writeReg111 (0xC6, 0x2703); writeReg111 (0xC8, 0x0320); // Output Width A  = 800
-  writeReg111 (0xC6, 0x2705); writeReg111 (0xC8, 0x0258); // Output Height A = 600
+  writeReg111 (0xC6, 0x2703); writeReg111 (0xC8, 800);    // Output Width A  = 800
+  writeReg111 (0xC6, 0x2705); writeReg111 (0xC8, 600);    // Output Height A = 600
   writeReg111 (0xC6, 0x270F); writeReg111 (0xC8, 0x001C); // Row Start A = 28
   writeReg111 (0xC6, 0x2711); writeReg111 (0xC8, 0x003C); // Column Start A = 60
-  writeReg111 (0xC6, 0x2713); writeReg111 (0xC8, 0x04B0); // Row Height A = 1200
-  writeReg111 (0xC6, 0x2715); writeReg111 (0xC8, 0x0640); // Column Width A = 1600
+  writeReg111 (0xC6, 0x2713); writeReg111 (0xC8, 1200);   // Row Height A = 1200
+  writeReg111 (0xC6, 0x2715); writeReg111 (0xC8, 1600);   // Column Width A = 1600
   writeReg111 (0xC6, 0x2717); writeReg111 (0xC8, 0x0384); // Extra Delay A = 900
   writeReg111 (0xC6, 0x2719); writeReg111 (0xC8, 0x0011); // Row Speed A = 17
-  writeReg111 (0xC6, 0x2727); writeReg111 (0xC8, 0x0000); // Crop_X0 A = 0
-  writeReg111 (0xC6, 0x2729); writeReg111 (0xC8, 0x0320); // Crop_X1 A = 800
-  writeReg111 (0xC6, 0x272B); writeReg111 (0xC8, 0x0000); // Crop_Y0 A = 0
-  writeReg111 (0xC6, 0x272D); writeReg111 (0xC8, 0x0258); // Crop_Y1 A = 600
+  writeReg111 (0xC6, 0x2727); writeReg111 (0xC8, 0);      // Crop_X0 A = 0
+  writeReg111 (0xC6, 0x2729); writeReg111 (0xC8, 800);    // Crop_X1 A = 800
+  writeReg111 (0xC6, 0x272B); writeReg111 (0xC8, 0);      // Crop_Y0 A = 0
+  writeReg111 (0xC6, 0x272D); writeReg111 (0xC8, 600);    // Crop_Y1 A = 600
   writeReg111 (0xC6, 0xA743); writeReg111 (0xC8, 0x02);   // Gamma and Contrast Settings A
   writeReg111 (0xC6, 0xA77D); writeReg111 (0xC8, 0x02);   // output format config A = 0x02 swap luma:chroma
 
@@ -361,18 +361,18 @@ void sensorInit111() {
   ; 60Hz Flicker Period: 154.97 lines
   */
   //}}}
-  writeReg111 (0xC6, 0x2707); writeReg111 (0xC8, 0x0640); // Output Width B  = 1600
-  writeReg111 (0xC6, 0x2709); writeReg111 (0xC8, 0x04B0); // Output Height B = 1200
+  writeReg111 (0xC6, 0x2707); writeReg111 (0xC8, 1600);   // Output Width B  = 1600
+  writeReg111 (0xC6, 0x2709); writeReg111 (0xC8, 1200);   // Output Height B = 1200
   writeReg111 (0xC6, 0x271B); writeReg111 (0xC8, 0x001C); // Row Start B = 28
   writeReg111 (0xC6, 0x271D); writeReg111 (0xC8, 0x003C); // Column Start B = 60
-  writeReg111 (0xC6, 0x271F); writeReg111 (0xC8, 0x04B0); // Row Height B = 1200
-  writeReg111 (0xC6, 0x2721); writeReg111 (0xC8, 0x0640); // Column Width B = 1600
+  writeReg111 (0xC6, 0x271F); writeReg111 (0xC8, 1200);   // Row Height B = 1200
+  writeReg111 (0xC6, 0x2721); writeReg111 (0xC8, 1600);   // Column Width B = 1600
   writeReg111 (0xC6, 0x2723); writeReg111 (0xC8, 0x01A7); // Extra Delay B = 423
   writeReg111 (0xC6, 0x2725); writeReg111 (0xC8, 0x0011); // Row Speed B = 17
-  writeReg111 (0xC6, 0x2735); writeReg111 (0xC8, 0x0000); // Crop_X0 B = 0
-  writeReg111 (0xC6, 0x2737); writeReg111 (0xC8, 0x0640); // Crop_X1 B = 1600
-  writeReg111 (0xC6, 0x2739); writeReg111 (0xC8, 0x0000); // Crop_Y0 B = 0
-  writeReg111 (0xC6, 0x273B); writeReg111 (0xC8, 0x04B0); // Crop_Y1 B = 1200
+  writeReg111 (0xC6, 0x2735); writeReg111 (0xC8, 0);      // Crop_X0 B = 0
+  writeReg111 (0xC6, 0x2737); writeReg111 (0xC8, 1600);   // Crop_X1 B = 1600
+  writeReg111 (0xC6, 0x2739); writeReg111 (0xC8, 0);      // Crop_Y0 B = 0
+  writeReg111 (0xC6, 0x273B); writeReg111 (0xC8, 1200);   // Crop_Y1 B = 1200
   writeReg111 (0xC6, 0xA744); writeReg111 (0xC8, 0x02);   // Gamma and Contrast Settings B
   writeReg111 (0xC6, 0xA77E); writeReg111 (0xC8, 0x02);   // output format config B = 0x02 swap luma:chroma
   //}}}
@@ -537,8 +537,8 @@ void sensorInit112() {
 
   //{{{  preview A
   // A output width = 640, height = 480
-  writeReg112 (0x338C, 0x2703); writeReg112 (0x3390, 640);  // Output Width
-  writeReg112 (0x338C, 0x2705); writeReg112 (0x3390, 480);  // Output Height
+  writeReg112 (0x338C, 0x2703); writeReg112 (0x3390, 800);  // Output Width
+  writeReg112 (0x338C, 0x2705); writeReg112 (0x3390, 600);  // Output Height
 
   // A row,column start,end = 120,160,1101,1461
   writeReg112 (0x338C, 0x270D); writeReg112 (0x3390, 0x0078);
@@ -574,18 +574,18 @@ void sensorInit112() {
   writeReg112 (0x338C, 0x272D); writeReg112 (0x3390, 0x2007); // sensor_dac_id_10_11 = 8199
 
   // A crop = 0,0,640,480
-  writeReg112 (0x338C, 0x2751); writeReg112 (0x3390, 0x0000); // Crop_X0 = 0
-  writeReg112 (0x338C, 0x2753); writeReg112 (0x3390, 0x0280); // Crop_X1 = 640
-  writeReg112 (0x338C, 0x2755); writeReg112 (0x3390, 0x0000); // Crop_Y0 = 0
-  writeReg112 (0x338C, 0x2757); writeReg112 (0x3390, 0x01E0); // Crop_Y1 = 480
+  writeReg112 (0x338C, 0x2751); writeReg112 (0x3390, 0);   // Crop_X0 = 0
+  writeReg112 (0x338C, 0x2753); writeReg112 (0x3390, 800); // Crop_X1 = 800
+  writeReg112 (0x338C, 0x2755); writeReg112 (0x3390, 0);   // Crop_Y0 = 0
+  writeReg112 (0x338C, 0x2757); writeReg112 (0x3390, 600); // Crop_Y1 = 600
 
   // A output_format
   writeReg112 (0x338c, 0x2795); writeReg112 (0x3390, 0x0002); // Natural, Swaps chrominance byte, yuv
   //}}}
   //{{{  capture B
   // B output width = 1600, height = 1200
-  writeReg112 (0x338C, 0x2707); writeReg112 (0x3390, 0x0640);
-  writeReg112 (0x338C, 0x2709); writeReg112 (0x3390, 0x04B0);
+  writeReg112 (0x338C, 0x2707); writeReg112 (0x3390, 1600);
+  writeReg112 (0x338C, 0x2709); writeReg112 (0x3390, 1200);
 
   // B row,column start,end = 4,4,1211,1611
   writeReg112 (0x338C, 0x272F); writeReg112 (0x3390, 0x0004); // Row Start (B)= 4
@@ -613,10 +613,10 @@ void sensorInit112() {
   writeReg112 (0x338C, 0x2747); writeReg112 (0x3390, 0x08ec);
 
   // B crop = 0,0,1600,1200
-  writeReg112 (0x338C, 0x275F); writeReg112 (0x3390, 0x0000); // Crop_X0 (B)= 0
-  writeReg112 (0x338C, 0x2761); writeReg112 (0x3390, 0x0640); // Crop_X1 (B)= 1600
-  writeReg112 (0x338C, 0x2763); writeReg112 (0x3390, 0x0000); // Crop_Y0 (B)= 0
-  writeReg112 (0x338C, 0x2765); writeReg112 (0x3390, 0x04B0); // Crop_Y1 (B)= 1200
+  writeReg112 (0x338C, 0x275F); writeReg112 (0x3390, 0);    // Crop_X0 (B)= 0
+  writeReg112 (0x338C, 0x2761); writeReg112 (0x3390, 1600); // Crop_X1 (B)= 1600
+  writeReg112 (0x338C, 0x2763); writeReg112 (0x3390, 0);    // Crop_Y0 (B)= 0
+  writeReg112 (0x338C, 0x2765); writeReg112 (0x3390, 1200); // Crop_Y1 (B)= 1200
 
   // B output format
   writeReg112 (0x338c, 0x2797); writeReg112 (0x3390, 0x0002); // B - Natural, Swaps chrominance byte, yuv
