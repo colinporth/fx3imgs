@@ -246,18 +246,16 @@ void sensorInit111() {
   writeReg111 (0x0D, 0x0000); // Disable soft reset by setting R0x0D:0 = 0x0000.
   CyU3PThreadSleep (100);
 
-  writeReg111 (0x05, 0x0204); // HBLANK B = 516
-  writeReg111 (0x06, 0x0014); // VBLANK B = 20
-  writeReg111 (0x07, 0x00FE); // HBLANK A = 254
-  writeReg111 (0x08, 0x000C); // VBLANK A = 12
+  writeReg111 (0x05, 0x0243); // HBLANK B
+  writeReg111 (0x06, 0x000b); // VBLANK B
+  writeReg111 (0x07, 0x010d); // HBLANK A
+  writeReg111 (0x08, 0x000b); // VBLANK A
   writeReg111 (0x20, 0x0300); // Read Mode B = 9:showBorder 8:overSized
   writeReg111 (0x21, 0x8400); // Read Mode A = 15:binning 10:bothADC
 
   //  PLL
-  writeReg111 (0x66, 0x1001);  // PLL Control 1    M:15:8,N:7:0 - M=16, N=1  (24mhz/(N+1))*M / 2*(P+1) = 48mhz
-  writeReg111 (0x67, 0x0501);  // PLL Control 2 0x05:15:8,P:7:0 - P=1
-  //writeReg111 (0x66, 0x8011);  // PLL Control 1    M:15:8,N:7:0 - M=79, N=2 (24mhz/(N+1))*M / 2*(P+1) = 80mhz
-  //writeReg111 (0x67, 0x0500);  // PLL Control 2 0x05:15:8,P:7:0 - P=1
+  writeReg111 (0x66, 0x1402);  // PLL Control 1    M:N - M=20, N=2 P=0 (24mhz/(N+1))*M / 2*(P+1) = 80mhz
+  writeReg111 (0x67, 0x0500);  // PLL Control 2 0x05:P
   writeReg111 (0x65, 0xA000);  // Clock CNTRL - PLL ON
   writeReg111 (0x65, 0x2000);  // Clock CNTRL - USE PLL
   CyU3PThreadSleep (100);
@@ -265,40 +263,6 @@ void sensorInit111() {
   // page 1
   writeReg111 (0xF0, 1);
   writeReg111 (0x97, 0x0002); // output format configuration luma:chroma swap
-
-  //{{{  sequencer
-  writeReg111 (0xC6, 0xA122); writeReg111 (0xC8, 0x01); // Enter Preview: Auto Exposure = 1
-  writeReg111 (0xC6, 0xA123); writeReg111 (0xC8, 0x00); // Enter Preview: Flicker Detection = 0
-  writeReg111 (0xC6, 0xA124); writeReg111 (0xC8, 0x01); // Enter Preview: Auto White Balance = 1
-  writeReg111 (0xC6, 0xA125); writeReg111 (0xC8, 0x00); // Enter Preview: Auto Focus = 0
-  writeReg111 (0xC6, 0xA126); writeReg111 (0xC8, 0x01); // Enter Preview: Histogram = 1
-  writeReg111 (0xC6, 0xA127); writeReg111 (0xC8, 0x00); // Enter Preview: Strobe Control  = 0
-  writeReg111 (0xC6, 0xA128); writeReg111 (0xC8, 0x00); // Enter Preview: Skip Control = 0
-
-  writeReg111 (0xC6, 0xA129); writeReg111 (0xC8, 0x03); // In Preview: Auto Exposure = 3
-  writeReg111 (0xC6, 0xA12A); writeReg111 (0xC8, 0x02); // In Preview: Flicker Detection = 2
-  writeReg111 (0xC6, 0xA12B); writeReg111 (0xC8, 0x03); // In Preview: Auto White Balance = 3
-  writeReg111 (0xC6, 0xA12C); writeReg111 (0xC8, 0x00); // In Preview: Auto Focus = 0
-  writeReg111 (0xC6, 0xA12D); writeReg111 (0xC8, 0x03); // In Preview: Histogram  = 3
-  writeReg111 (0xC6, 0xA12E); writeReg111 (0xC8, 0x00); // In Preview: Strobe Control = 0
-  writeReg111 (0xC6, 0xA12F); writeReg111 (0xC8, 0x00); // In Preview: Skip Control = 0
-
-  writeReg111 (0xC6, 0xA130); writeReg111 (0xC8, 0x04); // Exit Preview: Auto Exposure = 4
-  writeReg111 (0xC6, 0xA131); writeReg111 (0xC8, 0x00); // Exit Preview: Flicker Detection = 0
-  writeReg111 (0xC6, 0xA132); writeReg111 (0xC8, 0x01); // Exit Preview: Auto White Balance = 1
-  writeReg111 (0xC6, 0xA133); writeReg111 (0xC8, 0x00); // Exit Preview: Auto Focus = 0
-  writeReg111 (0xC6, 0xA134); writeReg111 (0xC8, 0x01); // Exit Preview: Histogram = 1
-  writeReg111 (0xC6, 0xA135); writeReg111 (0xC8, 0x00); // Exit Preview: Strobe Control = 0
-  writeReg111 (0xC6, 0xA136); writeReg111 (0xC8, 0x00); // Exit Preview: Skip Control = 0
-
-  writeReg111 (0xC6, 0xA137); writeReg111 (0xC8, 0x00); // Capture: Auto Exposure = 0
-  writeReg111 (0xC6, 0xA138); writeReg111 (0xC8, 0x00); // Capture: Flicker Detection = 0
-  writeReg111 (0xC6, 0xA139); writeReg111 (0xC8, 0x00); // Capture: Auto White Balance  = 0
-  writeReg111 (0xC6, 0xA13A); writeReg111 (0xC8, 0x00); // Capture: Auto Focus = 0
-  writeReg111 (0xC6, 0xA13B); writeReg111 (0xC8, 0x00); // Capture: Histogram = 0
-  writeReg111 (0xC6, 0xA13C); writeReg111 (0xC8, 0x00); // Capture: Strobe Control = 0
-  writeReg111 (0xC6, 0xA13D); writeReg111 (0xC8, 0x00); // Capture: Skip Control = 0
-  //}}}
   //{{{  mode a,b params
   writeReg111 (0xC6, 0x270B); writeReg111 (0xC8, 0x0030); // mode_config = disable jpeg A,B
 
@@ -330,8 +294,8 @@ void sensorInit111() {
   writeReg111 (0xC6, 0x2711); writeReg111 (0xC8, 0x003C); // Column Start A = 60
   writeReg111 (0xC6, 0x2713); writeReg111 (0xC8, 1200);   // Row Height A = 1200
   writeReg111 (0xC6, 0x2715); writeReg111 (0xC8, 1600);   // Column Width A = 1600
-  writeReg111 (0xC6, 0x2717); writeReg111 (0xC8, 0x0384); // Extra Delay A = 900
-  writeReg111 (0xC6, 0x2719); writeReg111 (0xC8, 0x0011); // Row Speed A = 17
+  writeReg111 (0xC6, 0x2717); writeReg111 (0xC8, 0x0003); // Extra Delay A
+  writeReg111 (0xC6, 0x2719); writeReg111 (0xC8, 0x0011); // Row Speed A
   writeReg111 (0xC6, 0x2727); writeReg111 (0xC8, 0);      // Crop_X0 A = 0
   writeReg111 (0xC6, 0x2729); writeReg111 (0xC8, 800);    // Crop_X1 A = 800
   writeReg111 (0xC6, 0x272B); writeReg111 (0xC8, 0);      // Crop_Y0 A = 0
@@ -367,14 +331,65 @@ void sensorInit111() {
   writeReg111 (0xC6, 0x271D); writeReg111 (0xC8, 0x003C); // Column Start B = 60
   writeReg111 (0xC6, 0x271F); writeReg111 (0xC8, 1200);   // Row Height B = 1200
   writeReg111 (0xC6, 0x2721); writeReg111 (0xC8, 1600);   // Column Width B = 1600
-  writeReg111 (0xC6, 0x2723); writeReg111 (0xC8, 0x01A7); // Extra Delay B = 423
-  writeReg111 (0xC6, 0x2725); writeReg111 (0xC8, 0x0011); // Row Speed B = 17
+  writeReg111 (0xC6, 0x2723); writeReg111 (0xC8, 0x02C9); // Extra Delay B
+  writeReg111 (0xC6, 0x2725); writeReg111 (0xC8, 0x0011); // Row Speed B
   writeReg111 (0xC6, 0x2735); writeReg111 (0xC8, 0);      // Crop_X0 B = 0
   writeReg111 (0xC6, 0x2737); writeReg111 (0xC8, 1600);   // Crop_X1 B = 1600
   writeReg111 (0xC6, 0x2739); writeReg111 (0xC8, 0);      // Crop_Y0 B = 0
   writeReg111 (0xC6, 0x273B); writeReg111 (0xC8, 1200);   // Crop_Y1 B = 1200
   writeReg111 (0xC6, 0xA744); writeReg111 (0xC8, 0x02);   // Gamma and Contrast Settings B
   writeReg111 (0xC6, 0xA77E); writeReg111 (0xC8, 0x02);   // output format config B = 0x02 swap luma:chroma
+
+  //other config
+  writeReg111 (0xC6, 0x276D); writeReg111 (0xC8, 0xE0E2); // FIFO_Conf1 A = 57570
+  writeReg111 (0xC6, 0xA76F); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 A = 225
+  writeReg111 (0xC6, 0x2774); writeReg111 (0xC8, 0xE0E1); // FIFO_Conf1 B = 57569
+  writeReg111 (0xC6, 0xA776); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 B = 225
+
+  writeReg111 (0xC6, 0xA217); writeReg111 (0xC8, 0x08);   // IndexTH23 = 8
+
+  writeReg111 (0xC6, 0x220B); writeReg111 (0xC8, 0x01B0); // Max R12 B (Shutter Delay)
+  writeReg111 (0xC6, 0x2228); writeReg111 (0xC8, 0x0216); // RowTime (msclk per)/4
+  writeReg111 (0xC6, 0x222F); writeReg111 (0xC8, 0x009A); // R9 Step = 94
+  writeReg111 (0xC6, 0xA408); writeReg111 (0xC8, 0x24);   // search_f1_50 = 21
+  writeReg111 (0xC6, 0xA409); writeReg111 (0xC8, 0x26);   // search_f2_50 = 23
+  writeReg111 (0xC6, 0xA40A); writeReg111 (0xC8, 0x1D);   // search_f1_60 = 17
+  writeReg111 (0xC6, 0xA40B); writeReg111 (0xC8, 0x1F);   // search_f2_60 = 19
+  writeReg111 (0xC6, 0x2411); writeReg111 (0xC8, 0x009A); // R9_Step_60 = 94
+  writeReg111 (0xC6, 0x2413); writeReg111 (0xC8, 0x00B9); // R9_Step_50 = 112
+  //}}}
+  //{{{  sequencer
+  writeReg111 (0xC6, 0xA122); writeReg111 (0xC8, 0x01); // Enter Preview: Auto Exposure = 1
+  writeReg111 (0xC6, 0xA123); writeReg111 (0xC8, 0x00); // Enter Preview: Flicker Detection = 0
+  writeReg111 (0xC6, 0xA124); writeReg111 (0xC8, 0x01); // Enter Preview: Auto White Balance = 1
+  writeReg111 (0xC6, 0xA125); writeReg111 (0xC8, 0x00); // Enter Preview: Auto Focus = 0
+  writeReg111 (0xC6, 0xA126); writeReg111 (0xC8, 0x01); // Enter Preview: Histogram = 1
+  writeReg111 (0xC6, 0xA127); writeReg111 (0xC8, 0x00); // Enter Preview: Strobe Control  = 0
+  writeReg111 (0xC6, 0xA128); writeReg111 (0xC8, 0x00); // Enter Preview: Skip Control = 0
+
+  writeReg111 (0xC6, 0xA129); writeReg111 (0xC8, 0x03); // In Preview: Auto Exposure = 3
+  writeReg111 (0xC6, 0xA12A); writeReg111 (0xC8, 0x02); // In Preview: Flicker Detection = 2
+  writeReg111 (0xC6, 0xA12B); writeReg111 (0xC8, 0x03); // In Preview: Auto White Balance = 3
+  writeReg111 (0xC6, 0xA12C); writeReg111 (0xC8, 0x00); // In Preview: Auto Focus = 0
+  writeReg111 (0xC6, 0xA12D); writeReg111 (0xC8, 0x03); // In Preview: Histogram  = 3
+  writeReg111 (0xC6, 0xA12E); writeReg111 (0xC8, 0x00); // In Preview: Strobe Control = 0
+  writeReg111 (0xC6, 0xA12F); writeReg111 (0xC8, 0x00); // In Preview: Skip Control = 0
+
+  writeReg111 (0xC6, 0xA130); writeReg111 (0xC8, 0x04); // Exit Preview: Auto Exposure = 4
+  writeReg111 (0xC6, 0xA131); writeReg111 (0xC8, 0x00); // Exit Preview: Flicker Detection = 0
+  writeReg111 (0xC6, 0xA132); writeReg111 (0xC8, 0x01); // Exit Preview: Auto White Balance = 1
+  writeReg111 (0xC6, 0xA133); writeReg111 (0xC8, 0x00); // Exit Preview: Auto Focus = 0
+  writeReg111 (0xC6, 0xA134); writeReg111 (0xC8, 0x01); // Exit Preview: Histogram = 1
+  writeReg111 (0xC6, 0xA135); writeReg111 (0xC8, 0x00); // Exit Preview: Strobe Control = 0
+  writeReg111 (0xC6, 0xA136); writeReg111 (0xC8, 0x00); // Exit Preview: Skip Control = 0
+
+  writeReg111 (0xC6, 0xA137); writeReg111 (0xC8, 0x00); // Capture: Auto Exposure = 0
+  writeReg111 (0xC6, 0xA138); writeReg111 (0xC8, 0x00); // Capture: Flicker Detection = 0
+  writeReg111 (0xC6, 0xA139); writeReg111 (0xC8, 0x00); // Capture: Auto White Balance  = 0
+  writeReg111 (0xC6, 0xA13A); writeReg111 (0xC8, 0x00); // Capture: Auto Focus = 0
+  writeReg111 (0xC6, 0xA13B); writeReg111 (0xC8, 0x00); // Capture: Histogram = 0
+  writeReg111 (0xC6, 0xA13C); writeReg111 (0xC8, 0x00); // Capture: Strobe Control = 0
+  writeReg111 (0xC6, 0xA13D); writeReg111 (0xC8, 0x00); // Capture: Skip Control = 0
   //}}}
   //{{{  Custom gamma tables...
   writeReg111 (0xC6, 0xA745);    //Gamma Table 0 A
@@ -453,24 +468,6 @@ void sensorInit111() {
   writeReg111 (0xC8, 0xF8);  //      = 248
   writeReg111 (0xC6, 0xA76A);    //Gamma Table 18 B
   writeReg111 (0xC8, 0xFF);  //      = 255
-  //}}}
-  //{{{  other config
-  writeReg111 (0xC6, 0x276D); writeReg111 (0xC8, 0xE0E2); // FIFO_Conf1 A = 57570
-  writeReg111 (0xC6, 0xA76F); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 A = 225
-  writeReg111 (0xC6, 0x2774); writeReg111 (0xC8, 0xE0E1); // FIFO_Conf1 B = 57569
-  writeReg111 (0xC6, 0xA776); writeReg111 (0xC8, 0xE1);   // FIFO_Conf2 B = 225
-
-  writeReg111 (0xC6, 0x220B); writeReg111 (0xC8, 0x0192); // Max R12 B (Shutter Delay) = 402
-  writeReg111 (0xC6, 0xA217); writeReg111 (0xC8, 0x08);   // IndexTH23 = 8
-  writeReg111 (0xC6, 0x2228); writeReg111 (0xC8, 0x020F); // RowTime (msclk per)/4 = 527
-
-  writeReg111 (0xC6, 0x222F); writeReg111 (0xC8, 0x009A); // R9 Step = 94
-  writeReg111 (0xC6, 0xA408); writeReg111 (0xC8, 0x24);   // search_f1_50 = 21
-  writeReg111 (0xC6, 0xA409); writeReg111 (0xC8, 0x26);   // search_f2_50 = 23
-  writeReg111 (0xC6, 0xA40A); writeReg111 (0xC8, 0x1D);   // search_f1_60 = 17
-  writeReg111 (0xC6, 0xA40B); writeReg111 (0xC8, 0x1F);   // search_f2_60 = 19
-  writeReg111 (0xC6, 0x2411); writeReg111 (0xC8, 0x009A); // R9_Step_60 = 94
-  writeReg111 (0xC6, 0x2413); writeReg111 (0xC8, 0x00B9); // R9_Step_50 = 112
   //}}}
   CyU3PThreadSleep (100);
 
